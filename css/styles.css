@@ -1,0 +1,487 @@
+/* -------------------------------------------------
+   Battle Trinity Cup - Stylesheet
+   目的:
+     - 黒×赤のコントラストでイベント性を演出
+     - 固定ヘッダーとシングルページ風の回遊を前提にした余白設計
+     - モバイル最優先でレイアウトを縮退させ、読みやすさを担保
+   設計方針:
+     - 主要トークン: 背景 #1a1a1a / 文字 #fff / アクセント #ff4444
+     - YouTube埋め込みはアスペクト比ボックスでレスポンシブ化
+--------------------------------------------------*/
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding-top: 170px; /* 固定ヘッダー分のオフセット */
+}
+
+/* コンテンツの最大幅は1,000px。中央寄せで読み幅を安定 */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    margin-top: 0;
+}
+
+/* ヘッダー/ナビ（上部固定）。赤ラインでブランド感を統一 */
+header {
+    background: #000;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #ff4444;
+    margin-bottom: 20px;
+}
+
+header.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #000;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 2px solid #ff4444;
+    margin-bottom: 20px;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+/* 水平方向の単純ナビゲーション。スクロール時も見失わない */
+nav {
+    text-align: center;
+    padding: 5px 0;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #ff4444;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.event-title { /* イベント詳細ページでの見出し用 */
+    font-size: 2.5em;
+    color: #ff4444;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: visible;
+}
+
+.sp-break { /* モバイルでの任意改行用 */
+    display: none;
+}
+
+/* Stickyを使う場合の雛形（現状はfixed-headerで対応） */
+nav.sticky-nav {
+    position: sticky;
+    top: 0;
+    background: #000;
+    padding: 10px 0;
+    z-index: 1000;
+    border-bottom: 2px solid #ff4444;
+}
+
+/* フラットな水平ナビ */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    white-space: nowrap;
+}
+nav ul li a:hover {
+    color: #ff4444;
+}
+.nav-link.active { /* 現在表示中のセクションを視覚化 */
+    color: #ff4444;
+    border-bottom: 2px solid #ff4444;
+}
+
+/* SPA用: デフォルト非表示。JSで必要なブロックだけ出す */
+section { margin-top: 0; }
+.section { display: none; }
+
+h2 { color: #fff; }
+
+/* ------------------- ヒーロー/スライド ------------------- */
+.hero {
+    text-align: center;
+    padding: 100px 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin-bottom: 0;
+    min-height: 300px;
+    padding-bottom: 0;
+}
+.hero::after { /* 画像の上に薄いオーバーレイを敷き、文字の視認性を確保 */
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    opacity: 1;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.slideshow { /* 背景として画像を切り替える。CLS回避目的でサイズ固定 */
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+    opacity: 1;
+}
+.slideshow::after { display: none; }
+
+.hero-content { /* テキストを最前面に */
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.hero h2 { font-size: 3em; margin: 0; text-shadow: 2px 2px 4px #000; }
+.hero p  { font-size: 1.5em; margin: 10px 0; }
+
+/* CTAボタン（アクセントカラー固定/幅は可読性優先） */
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background: #ff4444;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: box-shadow 0.3s ease;
+    white-space: nowrap;
+    width: auto;
+    min-width: 250px;
+    text-align: center;
+}
+.btn:hover { background: #cc3333; }
+
+/* ------------------- 実績ギャラリー ------------------- */
+.gallery {
+    padding-top: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 10px 0;
+    margin-top: 0;
+}
+.gallery-item {
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+}
+.gallery-item .overlay { /* 画像上にタイトルを重ね、ホバーで可視化 */
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    font-size: 1.2em;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.gallery-item:hover .overlay { opacity: 1; }
+
+.gallery-img {
+    width: 100%; height: auto;
+    border: 2px solid #ff4444;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* ------------------- 優勝者カード ------------------- */
+.winners-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 20px;
+}
+.winner { text-align: center; }
+.winner-name   { color: #ff4444; margin: 5px 0; font-size: 1.1em; }
+.winner-menber { color: #fff;    margin: 5px 0; font-size: 1.1em; }
+
+/* ------------------- 大会概要 ------------------- */
+.overview-content { padding: 20px; }
+.overview-content h3 { color: #ff4444; margin-top: 20px; }
+.overview-content p,
+.overview-content ul { font-size: 1.1em; line-height: 1.6; }
+.overview-content ul { padding-left: 20px; }
+
+/* ------------------- フッター ------------------- */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #000;
+    border-top: 2px solid #ff4444;
+}
+
+/* ------------------- エントリー案内 ------------------- */
+.entry-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+.entry-content h3 { color: #ff4444; margin-top: 20px; }
+.entry-content p  { margin: 10px 0; }
+.entry-content ol {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+.entry-content li { margin-bottom: 5px; }
+
+/* 連絡フォームUI（現在は非表示・保留の雛形） */
+/*
+.form-section { ... }
+...
+.radio-label:hover { ... }
+*/
+
+/* ------------------- 告知画像＆導線 ------------------- */
+.news-image {
+    position: relative;
+    width: 100%;
+    height: 400px; /* PCはヒーロー下でも視認性を確保 */
+    background-image: url('../images/summer3.jpg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: 20px;
+}
+.news-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.news-button {
+    position: relative;
+    background: #ff4444;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    margin: 5px 0;
+    white-space: nowrap;
+    width: auto;
+    min-width: 250px;
+    text-align: center;
+}
+.news-button:hover { background: #cc3333; box-shadow: 0 0 15px #ff6666; }
+.news-content {
+    max-width: 800px;
+    margin: 0 auto;
+    color: #fff;
+    font-size: 1em;
+    line-height: 1.6;
+}
+.news-content p  { margin: 10px 0; }
+.news-content ul { list-style: disc; padding-left: 20px; margin: 10px 0; }
+.news-content li { margin-bottom: 5px; }
+.new-badge { color: #ff4444; font-size: 0.9em; margin-left: 5px; font-weight: bold; }
+
+/* 参加フォーム仮領域（JSで切替予定のためデフォルト非表示） */
+#form-section { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
+#join-form    { display: block; }
+
+/* フォーム送信ボタン（活性/非活性/ホバー） */
+.form-submit { background: #ff4444; cursor: pointer; }
+.form-submit:hover { background: #cc3333; box-shadow: 0 0 15px #ff6666; }
+.form-submit:disabled { background: #ccc; cursor: not-allowed; }
+.form-submit:disabled:hover { background: #666; box-shadow: none; }
+
+#success-message {
+    display: none;
+    color: #44ff44;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+/* ------------------- YouTube埋め込み ------------------- */
+/* 16:9の比率ボックス。PCは幅60%で読みやすさ優先 */
+.video-container {
+    position: relative;
+    width: 60%;
+    padding-bottom: 33.75%;
+    margin-bottom: 20px;
+}
+.video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+}
+
+/* ------------------- ページトップへ戻る ------------------- */
+.back-to-top {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    padding: 10px 20px;
+    background: #ff4444;
+    color: #fff !important;
+    text-decoration: none;
+    border-radius: 50%;
+    font-size: 1.2em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    transition: background 0.3s ease;
+}
+.back-to-top:hover { background: #cc3333; color: #fff !important; }
+
+/* 大会概要の図版はテーマカラーに合わせて縁取り */
+.overview-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto;
+    border: 2px solid #ff4444;
+    border-radius: 5px;
+}
+
+/* ------------------- レスポンシブ ------------------- */
+/* 縦持ちスマホ */
+@media (max-width: 768px) and (orientation: portrait) {
+    body { padding-top: 110px; }
+    header.fixed-header {
+        height: 110px; /* bodyのpadding-topに一致させる */
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+    }
+    h1 { font-size: 1.8em; }
+    .event-title { font-size: 1.5em; white-space: normal; }
+    .sp-break { display: block; }
+
+    /* 横スクロール可能な簡易タブ風ナビ */
+    nav ul {
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    nav ul li { display: block; margin: 0 5px; }
+
+    /* ヒーローはスライドを見せつつ、ヘッダー重なりを調整 */
+    .hero {
+        position: relative;
+        min-height: 200px;
+        padding-top: 110px; /* ヘッダー高さぶん確保 */
+        padding-bottom: 20px;
+        margin-bottom: 0;
+    }
+    .hero::after { z-index: 2; background: rgba(0, 0, 0, 0.3); }
+    .hero h2 { font-size: 2em; line-height: 1.2; margin: 0; text-shadow: 2px 2px 4px #000; }
+    .hero p  { font-size: 1.2em; margin: 10px 0; text-shadow: 1px 1px 3px #000; }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1em;
+        width: 90%;
+        max-width: 350px;
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    /* ギャラリー/優勝者は1カラムに縮退 */
+    .gallery { padding-top: 0; padding: 5px 0; grid-template-columns: 1fr; margin-top: 0; padding-top: 0 !important; }
+    .winners-gallery { grid-template-columns: 1fr; padding: 5px 0; }
+
+    .join-content { max-width: 100%; }
+    .hero-content { position: relative; z-index: 3; padding: 10px; }
+
+    .slideshow {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-size: cover; /* 画面全幅で見せる */
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 1;
+        opacity: 1;
+    }
+
+    .mobile-break { display: block; }
+    .hero-title-part1, .hero-title-part2 { display: inline; }
+
+    /* 動画は画面幅いっぱい、16:9維持 */
+    .video-container {
+        width: 100%;
+        padding-bottom: 56.25%;
+        margin: 0 auto 20px;
+    }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+    /* 告知画像: 画面上部に寄せて見切れを軽減 */
+    .news-image {
+        height: auto;
+        min-height: 200px;
+        background-position: top center;
+        background-size: contain;
+        display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+        padding-top: 10px; padding-bottom: 10px; margin-bottom: 10px;
+    }
+
+    .news-button {
+        position: static; transform: none;
+        width: 90%; max-width: 350px;
+        padding: 12px 15px;
+        font-size: 1em;
+        margin: 5px 0;
+        white-space: nowrap;
+        text-align: center;
+    }
+}
+
+/* 横持ちスマホ */
+@media (max-width: 768px) and (orientation: landscape) {
+    body { padding-top: 100px; }
+    .sp-break { display: none; }
+}
+
+/* タブレット横〜PC */
+@media (min-width: 769px) and (orientation: landscape) {
+    body { padding-top: 170px; }
+}
+
+/* PC一般 */
+@media (min-width: 769px) {
+    .mobile-break { display: none; }
+    .hero-title-part1, .hero-title-part2 { display: inline; }
+    body { padding-top: 170px; }
+    .sp-break { display: none; }
+}
